@@ -3,7 +3,6 @@ package guru.springframework.reactivemongo.web.fn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
@@ -28,6 +27,7 @@ public class BeerRouterConfig {
                 .POST(BEER_PATH, accept(APPLICATION_JSON), handler::createNewBeer)
                 .PUT(BEER_PATH_ID, accept(APPLICATION_JSON), handler::updateBeerById)
                 .PATCH(BEER_PATH_ID, accept(APPLICATION_JSON), handler::patchBeerById)
+                .DELETE(BEER_PATH_ID, accept(APPLICATION_JSON), handler::deleteBeerById)
                 .build();
     }
 
