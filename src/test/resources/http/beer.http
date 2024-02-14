@@ -1,1 +1,1 @@
-GET http://localhost:8080/api/v3/beer
+GET http://localhost:8080/api/v3/beer/65cd2cc256ee2a711745c525
