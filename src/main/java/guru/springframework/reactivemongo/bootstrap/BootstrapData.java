@@ -1,7 +1,9 @@
 package guru.springframework.reactivemongo.bootstrap;
 
 import guru.springframework.reactivemongo.domain.Beer;
+import guru.springframework.reactivemongo.domain.Customer;
 import guru.springframework.reactivemongo.repositories.BeerRepository;
+import guru.springframework.reactivemongo.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,14 +16,12 @@ import java.time.LocalDateTime;
 public class BootstrapData implements CommandLineRunner {
 
     private final BeerRepository beerRepository;
+    private final CustomerRepository customerRepository;
 
     @Override
-    public void run(String... args) throws Exception {
-        beerRepository.deleteAll()
-                .doOnSuccess(success -> {
-                    loadBeerData();
-                })
-                .subscribe();
+    public void run(String... args) {
+        beerRepository.deleteAll().doOnSuccess(success -> loadBeerData()).subscribe();
+        customerRepository.deleteAll().doOnSuccess(success -> loadCustomerData()).subscribe();
     }
 
     private void loadBeerData() {
@@ -53,6 +53,30 @@ public class BootstrapData implements CommandLineRunner {
                         .upc("12356")
                         .price(new BigDecimal("13.99"))
                         .quantityOnHand(144)
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build()).subscribe();
+            }
+        });
+    }
+
+    private void loadCustomerData() {
+        customerRepository.count().subscribe(count -> {
+            if (count == 0) {
+                customerRepository.save(Customer.builder()
+                        .customerName("Good Customer")
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build()).subscribe();
+
+                customerRepository.save(Customer.builder()
+                        .customerName("Average Customer")
+                        .createdDate(LocalDateTime.now())
+                        .lastModifiedDate(LocalDateTime.now())
+                        .build()).subscribe();
+
+                customerRepository.save(Customer.builder()
+                        .customerName("Bad Customer")
                         .createdDate(LocalDateTime.now())
                         .lastModifiedDate(LocalDateTime.now())
                         .build()).subscribe();
